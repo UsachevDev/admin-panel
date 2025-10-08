@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { setToken, clearToken } from "@/lib/auth";
 
-const BASE = process.env.NEXT_PUBLIC_API_BASE!;
+const RAW = process.env.NEXT_PUBLIC_API_BASE!;
+const BASE = RAW.replace(/\/$/, "");
 const DEV_FAKE_AUTH = process.env.DEV_FAKE_AUTH === "1";
 
 async function readUpstreamMessage(res: Response) {

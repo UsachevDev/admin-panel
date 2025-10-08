@@ -1,10 +1,10 @@
-"use server";
 import { cookies } from "next/headers";
 
 const TOKEN_COOKIE = "token";
 
 export async function setToken(token: string) {
-    cookies().set(TOKEN_COOKIE, token, {
+    const c = await cookies();
+    c.set(TOKEN_COOKIE, token, {
         httpOnly: true,
         sameSite: "lax",
         secure: true,
@@ -14,9 +14,11 @@ export async function setToken(token: string) {
 }
 
 export async function clearToken() {
-    cookies().delete(TOKEN_COOKIE);
+    const c = await cookies();
+    c.delete(TOKEN_COOKIE);
 }
 
-export async function getTokenFromCookies(): Promise<string | undefined> {
-    return cookies().get(TOKEN_COOKIE)?.value;
+export async function getTokenFromCookies() {
+    const c = await cookies();
+    return c.get(TOKEN_COOKIE)?.value ?? null;
 }
