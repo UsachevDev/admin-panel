@@ -1,28 +1,32 @@
+// src/middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+const PUBLIC = ["/login"];
+
 export const config = {
-  matcher: [
-    "/",                // главная
-    "/admins/:path*",   // всё под /admins
-    "/users/:path*",    // всё под /users
-    "/posts/:path*",    // всё под /posts
-    "/profile/:path*",  // всё под /profile
-  ],
+    // все app-роуты, кроме статики и /api
+    matcher: ["/((?!_next|api|favicon.ico|robots.txt|sitemap.xml).*)"],
 };
 
 export function middleware(req: NextRequest) {
-  const token = req.cookies.get("token")?.value;
-  const isLogin = req.nextUrl.pathname.startsWith("/login");
+    const { pathname, search } = req.nextUrl;
+    const token = req.cookies.get("token")?.value;
+    const isPublic = PUBLIC.some(p => pathname.startsWith(p));
 
-  if (!token && !isLogin) {
-    const url = req.nextUrl.clone();
-    url.pathname = "/login";
-    url.searchParams.set("next", req.nextUrl.pathname);
-    return NextResponse.redirect(url);
-  }
-  if (token && isLogin) {
-    return NextResponse.redirect(new URL("/", req.url));
-  }
-  return NextResponse.next();
+    if (!token && !isPublic) {
+        const url = req.nextUrl.clone();
+        url.pathname = "/login";
+        url.search = search || "";
+        url.searchParams.set("next", pathname);
+        return NextResponse.redirect(url);
+    }
+
+    if (token && pathname.startsWith("/login")) {
+        const url = req.nextUrl.clone();
+        url.pathname = "/posts";
+        return NextResponse.redirect(url);
+    }
+
+    return NextResponse.next();
 }
