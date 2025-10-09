@@ -1,6 +1,10 @@
 "use client";
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import Image from "next/image";
+import Logo from "@/../public/logo-btx.svg";
+import { Input, Button } from "@/components/ui";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -8,39 +12,110 @@ export default function LoginPage() {
     const [err, setErr] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
-    async function onSubmit(e: React.FormEvent) {
+    async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setErr(null); setLoading(true);
-        const form = e.target as HTMLFormElement;
-        const username = (form.elements.namedItem("username") as HTMLInputElement).value;
-        const password = (form.elements.namedItem("password") as HTMLInputElement).value;
+        const fd = new FormData(e.currentTarget);
+        const username = String(fd.get("username") || "");
+        const password = String(fd.get("password") || "");
 
         const res = await fetch("/api/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password }),
         });
-
-        const payload = await res.json().catch(() => null);
+        const json = await res.json().catch(() => null);
         setLoading(false);
-        if (!res.ok) {
-            setErr(payload?.error || "Неверный логин или пароль");
-            return;
-        }
+        if (!res.ok) { setErr(json?.error || "Неверный логин или пароль"); return; }
         router.replace(next);
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-6">
-            <form onSubmit={onSubmit} className="w-full max-w-sm space-y-4">
-                <h1 className="text-xl font-semibold">Вход</h1>
-                <input name="username" placeholder="Логин" className="w-full border rounded px-3 py-2" required />
-                <input name="password" type="password" placeholder="Пароль" className="w-full border rounded px-3 py-2" required />
-                {err && <p className="text-red-500 text-sm">{err}</p>}
-                <button disabled={loading} className="w-full border rounded px-3 py-2">
-                    {loading ? "Входим..." : "Войти"}
-                </button>
-            </form>
+        <div className="min-h-dvh bg-primary-100/60 sm:bg-primary-50">
+            {/* MOBILE 320 */}
+            <div className="sm:hidden mx-auto w-full max-w-[320px]">
+                <div className="sm:hidden mx-auto w-full max-w-[320px] min-h-dvh flex flex-col gap-4 bg-primary-50">
+                    {/* белая шапка с лого, скругление только снизу */}
+                    <div className="bg-white rounded-b-md shadow-card py-3 flex justify-center">
+                        <Image src={Logo} alt="BTX" width={72} height={24} priority />
+                    </div>
+
+                    {/* контент, прижат вверх */}
+                    <div className="bg-white rounded-t-md rounded-b-0 flex-1 p-5 space-y-5">
+                        <div className="text-center">
+                            <h1 className="text-[20px]/[24px] font-semibold">Панель администратора</h1>
+                            <p className="mt-1 text-body14 text-content3-foreground">Войдите в систему для продолжения</p>
+                        </div>
+
+                        <form onSubmit={onSubmit} className="grid gap-5" noValidate>
+                            <div className="grid gap-2">
+                                <label htmlFor="username" className="text-body12 text-content4-foreground">Имя пользователя</label>
+                                <Input id="username" name="username"
+                                    className="h-8 rounded-md border-2 border-default-200 px-4 text-body12" radius="md" isRequired />
+                            </div>
+
+                            <div className="grid gap-2">
+                                <label htmlFor="password" className="text-body12 text-content4-foreground">Пароль</label>
+                                <Input id="password" name="password" type="password"
+                                    className="h-8 rounded-md border-2 border-default-200 px-4 text-body12" radius="md" isRequired />
+                            </div>
+
+                            {err && (
+                                <div role="alert" className="rounded-md border-2 border-danger/20 bg-danger-50 text-danger px-3 py-2 text-body12">
+                                    {err}
+                                </div>
+                            )}
+
+                            <Button type="submit" color="primary" radius="md" className="h-10 w-full rounded-md px-4 text-btn16" isLoading={loading}>
+                                Войти
+                            </Button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {/* DESKTOP ≥640px: карточка целиком, лого внутри cap-блока, полный радиус */}
+            <div className="hidden sm:block">
+                <div className="mx-auto w-full max-w-[445px] pt-[85px]">
+                    <div className="rounded-xl bg-white shadow-card overflow-hidden">
+                        <div className="flex h-12 items-center justify-center bg-white">
+                            <Image src={Logo} alt="BTX" width={72} height={24} priority />
+                        </div>
+
+                        <div className="p-8 space-y-5">
+                            <div className="text-center">
+                                <h1 className="text-h1">Панель администратора</h1>
+                                <p className="mt-1 text-body18 text-content3-foreground">Войдите в систему для продолжения</p>
+                            </div>
+
+                            <form onSubmit={onSubmit} className="grid gap-5" noValidate>
+                                <div className="grid gap-2">
+                                    <label htmlFor="d-username" className="label">Имя пользователя</label>
+                                    <Input id="d-username" name="username" placeholder="admin@example.com" radius="md"
+                                        className="h-[42px] rounded-md border-2 border-default-200 px-6 text-body14" isRequired />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <label htmlFor="d-password" className="label">Пароль</label>
+                                    <Input id="d-password" name="password" type="password" placeholder="Введите пароль" radius="md"
+                                        className="h-[42px] rounded-md border-2 border-default-200 px-6 text-body14" isRequired />
+                                </div>
+
+                                {err && (
+                                    <div role="alert" className="rounded-md border-2 border-danger/20 bg-danger-50 text-danger px-3 py-2">
+                                        {err}
+                                    </div>
+                                )}
+
+                                <Button type="submit" color="primary" radius="md"
+                                    className="h-12 w-full rounded-md px-6 text-btn16" isLoading={loading}>
+                                    Войти
+                                </Button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
