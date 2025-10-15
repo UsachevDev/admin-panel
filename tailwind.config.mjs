@@ -7,15 +7,7 @@ const config = {
         extend: {
             borderRadius: { md: "12px", xl: "16px", "2xl": "20px" },
             boxShadow: { card: "0 8px 24px rgba(0,0,0,.06)" },
-            fontSize: {
-                h1: ["36px", { lineHeight: "40px", fontWeight: "600" }],
-                body18: ["18px", { lineHeight: "28px" }],
-                body14: ["14px", { lineHeight: "20px" }],
-                body12: ["12px", { lineHeight: "16px" }],
-                btn16: ["16px", { lineHeight: "24px", fontWeight: "600" }],
-            },
             colors: {
-                // вспомогательные алиасы для utility-классов
                 text: {
                     primary: "#11181C",
                     fg500: "#71717A",
@@ -29,7 +21,8 @@ const config = {
             themes: {
                 light: {
                     colors: {
-                        // layout / content
+                        // layout
+                        background : "#FFFFFF", 
                         foreground: "#11181C",
                         "content1-foreground": "#11181C",
                         "content2-foreground": "#27272A",
