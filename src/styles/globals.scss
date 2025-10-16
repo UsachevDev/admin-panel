@@ -7,28 +7,67 @@
   --sidebar-width: 280px;
 }
 
+input,
+textarea,
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Отключить автозаполнение Chrome */
+input:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px white inset !important;
+  -webkit-text-fill-color: inherit !important;
+}
+
+/* Удалить иконку у password поля (Edge/Chrome) */
+input::-ms-reveal,
+input::-ms-clear,
+input::-webkit-credentials-auto-fill-button {
+  display: none !important;
+}
+
+/* Для Safari (убрать желтую подсветку) */
+input:autofill {
+  background: none !important;
+}
+
+
 .card {
   @apply bg-white rounded-xl shadow-card p-6;
 }
 
 /* Кнопки: 48 / 40 */
 .btn-lg {
-  @apply h-12 rounded-md px-6 inline-flex items-center justify-center gap-2 text-btn16;
+  @apply h-12 rounded-md px-6 inline-flex items-center justify-center gap-2 text-lg;
 }
 
 .btn-md {
-  @apply h-10 rounded-md px-4 inline-flex items-center justify-center gap-2 text-btn16;
+  @apply h-10 rounded-md px-4 inline-flex items-center justify-center gap-2 text-lg;
 }
 
 /* Инпуты: 42 / 32, бордер 2px, radius 12 */
 .input-lg {
-  @apply h-[42px] rounded-md border-2 border-default-200 px-6 text-body14;
+  @apply h-[42px] rounded-md border-2 border-default-200 px-6 text-small;
 }
 
 .input-md {
-  @apply h-8 rounded-md border-2 border-default-200 px-4 text-body12;
+  @apply h-8 rounded-md border-2 border-default-200 px-4 text-tiny;
 }
 
 .label {
-  @apply text-body12 text-content4-foreground;
+  @apply text-tiny text-content4-foreground;
 }

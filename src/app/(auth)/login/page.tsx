@@ -67,7 +67,7 @@ export default function LoginPage() {
                             </div>
 
                             {err && (
-                                <div role="alert" className="rounded-md border-2 border-danger/20 bg-danger-50 text-danger px-3 py-2 text-body12">
+                                <div role="alert" className="rounded-md border-2 border-danger/20 bg-danger-50 text-danger px-3 py-2 text-tiny">
                                     {err}
                                 </div>
                             )}
@@ -99,7 +99,7 @@ export default function LoginPage() {
                                     <label htmlFor="d-username" className="text-tiny text-default-600">Имя пользователя</label>
                                     <Input id="d-username" name="username" placeholder="admin@example.com" radius="md"
                                         classNames={{
-                                            inputWrapper: "h-8 min-h-[32px] border-2 border-default-200 rounded-md px-3",
+                                            inputWrapper: "h-8 min-h-[32px] border-2 border-default-200 rounded-md pt-0.5 px-3",
                                             input: "text-medium text-default-500",
                                         }} isRequired />
                                 </div>
@@ -108,7 +108,7 @@ export default function LoginPage() {
                                     <label htmlFor="d-password" className="text-tiny text-default-600">Пароль</label>
                                     <Input id="d-password" name="password" type="password" placeholder="Введите пароль" radius="md"
                                         classNames={{
-                                            inputWrapper: "h-8 min-h-[32px] border-2 border-default-200 rounded-md px-3",
+                                            inputWrapper: "h-8 min-h-[32px] border-2 border-default-200 rounded-md pt-0.5 px-3",
                                             input: "text-medium text-default-500",
                                         }} isRequired />
                                 </div>
